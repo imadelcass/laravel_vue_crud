@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/' , [PostController::class , 'index']);
 Route::post('/' , [PostController::class , 'store']);
 Route::delete('/delete/{post}' , [PostController::class , 'destroy']);
+Route::post('update/{post}', [PostController::class, 'update']);
+Route::post('/register' , [UserController::class, 'create']);
+Route::post('/login' , [UserController::class, 'store']);
+// Route::get('/register' , function () {
+//     return redirect('/eee');
+// });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

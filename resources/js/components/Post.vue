@@ -1,5 +1,8 @@
 <template>
-    <div class="flex flex-col w-full py-2 shadow-md rounded-xl mb-2">
+    <div
+        :class="createdNow ? 'bg-yellow-200' : 'bg-white'"
+        class="flex flex-col w-full py-2 shadow-md rounded-xl mb-2"
+    >
         <div class="flex justify-between px-4 h-16 items-center w-full">
             <div class="flex-1 flex h-full items-center">
                 <div class="w-12 h-12 mr-2 rounded-full overflow-hidden">
@@ -37,7 +40,7 @@
             </div>
             <div class="flex justify-between">
                 <div>
-                    <button @click="updatePost">Update</button>
+                    <button @click="getPostToUpdate">Update</button>
                 </div>
                 <div>
                     <button @click="deletePost">Delete</button>
@@ -48,41 +51,51 @@
 </template>
 <script>
 import moment from "moment";
-import { inject, provide } from "vue";
-import axios from "axios";
-
 export default {
     props: {
         post: Object,
     },
-    setup(props) {
-        // custom date with moment library
-        const date = moment(Date.parse(props.post.created_at)).fromNow();
-        // grab store
-        const store = inject("store");
-        async function deletePost() {
-            try {
-                const res = await axios.delete(
-                    `http://127.0.0.1:8000/api/delete/${props.post.id}`
-                );
-                store.posts = store.posts.filter(
-                    (post) => post.id !== res.data.id
-                );
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        async function updatePost() {
-            store.update = {
-                state: true,
-                post: props.post,
-            };
-        }
-        return {
-            date,
-            deletePost,
-            updatePost,
-        };
+    data() {
+        return {};
     },
+    methods: {
+        getPostToUpdate() {
+            this.$store.commit("getPostToUpdate", {
+                state: true,
+                post: this.post,
+            });
+        },
+    },
+    // setup(props) {
+    //     // custom date with moment library
+    //     const date = moment(Date.parse(props.post.created_at)).fromNow();
+    //     // grab store
+    //     async function deletePost() {
+    //         try {
+    //             const res = await axios.delete(
+    //                 `http://127.0.0.1:8000/api/delete/${props.post.id}`
+    //             );
+    //             store.posts = store.posts.filter(
+    //                 (post) => post.id !== res.data.id
+    //             );
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //
+    //     const createdNow = ref(false);
+    //     if (Date.parse(props.post.updated_at) + 10000 > Date.now()) {
+    //         createdNow.value = true;
+    //         setTimeout(() => {
+    //             createdNow.value = false;
+    //         }, 2000);
+    //     }
+    //     return {
+    //         date,
+    //         deletePost,
+    //         getPostToUpdate,
+    //         createdNow,
+    //     };
+    // },
 };
 </script>

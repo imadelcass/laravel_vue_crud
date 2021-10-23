@@ -27,6 +27,11 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "moment": "^2.29.1"
+        "@vuelidate/core": "^2.0.0-alpha.28",
+        "@vuelidate/validators": "^2.0.0-alpha.23",
+        "moment": "^2.29.1",
+        "vue-router": "^4.0.12",
+        "vuex": "^4.0.2",
+        "yup": "^0.32.11"
     }
 }

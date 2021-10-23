@@ -17,26 +17,20 @@
             <h2 class="text-lg font-medium">CRUD APP</h2>
         </div>
         <nav class="flex-1 flex justify-between">
-            <a href="#">Home</a>
+            <router-link to="/">Home</router-link>
+            <router-link to="/login">Login</router-link>
+            <router-link to="/register">Register</router-link>
             <button @click="check">click</button>
-            <a href="#">Login</a>
-            <a href="#">Register</a>
         </nav>
     </header>
 </template>
-
 <script>
-import { inject } from "vue";
 export default {
-    setup() {
-        const store = inject("store");
-        
-        function check() {
-            console.log(store.update.post.body);
-        }
-        return {
-            check,
-        };
+    methods: {
+        check() {
+            // this.$store.dispatch("getPosts");
+            console.log(this.$store.state.postUpdate);
+        },
     },
 };
 </script>

@@ -5,6 +5,7 @@ module.exports = {
         extend: {
             colors: {
                 csBlue: "#121C3A",
+                csBlueDisable: "#121c3aa2",
             },
             textColor: {
                 clrBlue: "#121C3A",
