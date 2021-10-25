@@ -4,7 +4,7 @@
             <div class="flex flex-col">
                 <div class="my-2 h-20">
                     <input
-                        v-model="postBody"
+                        v-model="post.body"
                         class="
                             h-full
                             w-full
@@ -27,33 +27,21 @@
                         </div>
                     </div>
                     <div>
-                        <!-- <button
+                        <button
                             type="button"
                             class="bg-csBlue px-3 py-2 text-white rounded"
                             v-on="
-                                store.update.state
+                                $store.state.postUpdate.state
                                     ? { click: updatePost }
                                     : { click: addPost }
                             "
                         >
-                            {{ store.update.state ? "Update" : "Post" }}
-                        </button> -->
-                        <button
-                            type="button"
-                            class="bg-csBlue px-3 py-2 text-white rounded"
-                            @click="addPost"
-                        >
-                            post
+                            {{
+                                $store.state.postUpdate.state
+                                    ? "Update"
+                                    : "Post"
+                            }}
                         </button>
-                        <button
-                            type="button"
-                            class="bg-csBlue px-3 ml-2 py-2 text-white rounded"
-                            @click="updatePost"
-                        >
-                            update
-                        </button>
-
-                        <!-- <button @click="tryFunc">try button</button> -->
                     </div>
                 </div>
             </div>
@@ -64,29 +52,36 @@
 export default {
     data() {
         return {
-            postBody: this.$store.state.postUpdate.post.body,
+            post: {
+                body: "",
+            },
         };
     },
     methods: {
         addPost() {
             this.$store.dispatch("addPost", {
                 user_id: 3,
-                body: this.postBody,
+                body: this.post.body,
             });
+            this.post = {
+                body: "",
+            };
         },
         updatePost() {
-            this.$store.dispatch("updatePost", {
-                id: 75,
-                body: this.postBody,
-            });
+            this.$store.dispatch("updatePost", this.post);
         },
     },
-
+    //trigger func to update postBody if the state is changing.
+    computed: {
+        checkPostBodyChange() {
+            return this.$store.state.postUpdate;
+        },
+    },
+    watch: {
+        checkPostBodyChange(newVal, oldVal) {
+            this.post = newVal.post;
+            // console.log(newVal.post.body);
+        },
+    },
 };
 </script>
-// setup() { // let postBody = ref(""); // const store = inject("store"); //
-const newPost = computed(() => { // return { // body: postBody.value, //
-user_id: 3, // }; // }); // watch(store, () => { // if (store.update.state) { //
-postBody.value = store.update.post.body; // } else { // postBody.value = ""; //
-} // }); // provide("store", store); // return { // addPost, // updatePost, //
-postBody, // store, // }; // },

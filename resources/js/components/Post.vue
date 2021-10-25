@@ -43,7 +43,7 @@
                     <button @click="getPostToUpdate">Update</button>
                 </div>
                 <div>
-                    <button @click="deletePost">Delete</button>
+                    <button @click="getPostToDelete">Delete</button>
                 </div>
             </div>
         </div>
@@ -56,7 +56,10 @@ export default {
         post: Object,
     },
     data() {
-        return {};
+        return {
+            date: null,
+            createdNow: false,
+        };
     },
     methods: {
         getPostToUpdate() {
@@ -65,37 +68,35 @@ export default {
                 post: this.post,
             });
         },
+        getPostToDelete() {
+            this.$store.dispatch("deletePost", this.post);
+        },
+        // custom date with moment library
+        updateDate() {
+            return (this.date = moment(
+                Date.parse(this.post.created_at)
+            ).fromNow());
+        },
     },
-    // setup(props) {
-    //     // custom date with moment library
-    //     const date = moment(Date.parse(props.post.created_at)).fromNow();
-    //     // grab store
-    //     async function deletePost() {
-    //         try {
-    //             const res = await axios.delete(
-    //                 `http://127.0.0.1:8000/api/delete/${props.post.id}`
-    //             );
-    //             store.posts = store.posts.filter(
-    //                 (post) => post.id !== res.data.id
-    //             );
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    //
-    //     const createdNow = ref(false);
-    //     if (Date.parse(props.post.updated_at) + 10000 > Date.now()) {
-    //         createdNow.value = true;
-    //         setTimeout(() => {
-    //             createdNow.value = false;
-    //         }, 2000);
-    //     }
-    //     return {
-    //         date,
-    //         deletePost,
-    //         getPostToUpdate,
-    //         createdNow,
-    //     };
-    // },
+    mounted() {
+        this.updateDate();
+    },
+    computed: {
+        checkCreatedNow() {
+            return this.$store.state.posts;
+        },
+    },
+    watch: {
+        checkCreatedNow(oldVal, newVal) {
+            // if (Date.parse(this.post.updated_at) + 10000 > Date.now()) {
+            //     console.log('hello');
+            //     this.createdNow = true;
+            //     setTimeout(() => {
+            //         this.createdNow = false;
+            //     }, 2000);
+            // }
+            // this.createdNow = true;
+        },
+    },
 };
 </script>

@@ -15,11 +15,8 @@ class PostController extends Controller
     {
         // validate the post
         $validated = $request->validate([
-            'body' => 'required|min:10',
+            'body' => 'required|min:5',
         ]);
-        if(!$validated){
-            return 'error acurre';
-        }
         // store the post        
         $post = new Post();
         $post->body = $request->body;

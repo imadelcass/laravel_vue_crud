@@ -20,10 +20,24 @@ export default createStore({
         },
         updatePost(state, post) {
             return (state.posts[state.posts.findIndex((e) => e.id == post.id)] =
-                post);
+                post)(
+                (state.postUpdate = {
+                    state: false,
+                    post: {
+                        body: "",
+                    },
+                })
+            );
         },
         getPostToUpdate(state, post) {
             return (state.postUpdate = post);
+        },
+        deletePost(state, post) {
+            // return state.posts.splice(
+            //     state.posts.findIndex((e) => e.id === post.id),
+            //     1
+            // );
+            return (state.posts = state.posts.filter((p) => p.id !== post.id));
         },
     },
     actions: {
@@ -48,16 +62,27 @@ export default createStore({
                 console.log(error);
             }
         },
-        async updatePost(state, { commit }) {
+        async updatePost({ commit }, post) {
             try {
                 const req = await axios.post(
-                    `http://127.0.0.1:8000/api/update/${state.state.update.post.id}`,
-                    state.state.update.post
+                    `http://127.0.0.1:8000/api/update/${post.id}`,
+                    post
                 );
                 const res = await req.data;
                 commit("updatePost", res);
                 // store.update.state = false;
                 // console.log(res);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async deletePost({ commit }, post) {
+            try {
+                const req = await axios.delete(
+                    `http://127.0.0.1:8000/api/delete/${post.id}`
+                );
+                const res = await req.data;
+                commit("deletePost", res);
             } catch (error) {
                 console.log(error);
             }
